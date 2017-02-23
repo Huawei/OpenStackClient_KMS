@@ -45,10 +45,10 @@ def from_http_error(exception):
             message = ''
             if isinstance(body, dict) and isinstance(body.get("error"), dict):
                 error = body["error"]
-                if "code" in error:
-                    message += '[%s] ' % error["code"]
-                if "message" in error:
-                    message += error["message"]
+                if "error_code" in error:
+                    message += '[%s] ' % error["error_code"]
+                if "error_msg" in error:
+                    message += error["error_msg"]
 
             if message != '':
                 kwargs["message"] = message

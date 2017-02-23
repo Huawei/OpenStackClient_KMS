@@ -14,17 +14,19 @@
 #
 import logging
 
+from kmclient.v1 import encryption_mgr
+
 LOGGER = logging.getLogger(__name__)
 
 
 class Client(object):
-    """Client for the HuaWei AutoScaling v2 API."""
+    """Client for the HuaWei AutoScaling v1 API."""
 
     # service name registered in open-stack
-    service_name = 'volume_backup'
+    service_name = 'key-manager'
 
     def __init__(self, session=None, endpoint=None, **kwargs):
-        """Initialize a new client for the VBS v2 API.
+        """Initialize a new client for the VBS v1 API.
 
         :param keystoneauth1.session.Session session:
             The session to be used for making the HTTP API calls.  If None,
@@ -35,20 +37,22 @@ class Client(object):
             Keyword arguments passed to keystoneauth1.session.Session().
         """
 
-        from kmclient.common import httpclient as client
-        from kmclient.v1 import job_mgr
+        from kmclient.common import httpclient
+        from kmclient.v1 import key_mgr
 
         # http_log_debug = utils.get_effective_log_level() <= logging.DEBUG
         default_options = {
             'service_name': self.service_name,
-            'client_name': 'Volume Backup Client(HuaWei)',
-            'client_version': 'V1',
+            'client_name': 'Key Manager Client(HuaWei)',
+            'client_version': 'V2',
             'logger': LOGGER,
         }
         kwargs.update(default_options)
 
         if endpoint:
-            endpoint += '/v1/%(project_id)s'
-
-        self.client = client.OpenStackHttpClient(session, endpoint, **kwargs)
-        self.job_mgr = job_mgr.JobManager(self.client)
+            endpoint += '/v1.0/%(project_id)s/kms'
+        self.client = httpclient.OpenStackHttpClient(
+            session, endpoint, **kwargs
+        )
+        self.keys = key_mgr.KeyManager(self.client)
+        self.encryption = encryption_mgr.EncryptionManager(self.client)

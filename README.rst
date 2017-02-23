@@ -1,7 +1,7 @@
 python-kmclient
 =====================
 
-This is a `OpenStack Client`_ plugin for HuaWei Volume Backup Management API
+This is a `OpenStack Client`_ plugin for HuaWei Key Manager Management API
 which provides **command-line scripts** (integrated with openstack) and
 Python library for accessing the Cloud-Eye management API.
 
@@ -28,7 +28,7 @@ Currently, We can install the plugin from source code
 
 .. code:: console
 
-    $ git clone https://github.com/Huawei/OpenStackClient_VBS python-kmclient
+    $ git clone https://github.com/Huawei/OpenStackClient_KMS python-kmclient
     $ cd python-kmclient
     # use python setup.py develop for test purpose
     $ python setup.py install
@@ -71,63 +71,146 @@ Show Help for command::
                  .......
 
 
-Volume-Backup-Service Client contains commands list in table below, use -h
-option to get more usage
+Key Manager Client contains commands list below, use -h option to get more usage
+
+1. key create(创建密钥)::
+
+    $ openstack key create woo-test-3 --realm=eu-de --type=xxx --description=desc
+        --policy=policy --usage=usage --debug
+    +-----------+--------------------------------------+
+    | Field     | Value                                |
+    +-----------+--------------------------------------+
+    | Key ID    | b919e712-3743-4f7d-8d9e-8730a94aea0b |
+    | Domain Id | bb42e2cd2b784ac4bdc350fb660a2bdb     |
+    +-----------+--------------------------------------+
 
 
-1. Show Help for `Create Volume Backup`::
+#. Key show(查询密钥信息)::
 
-    $ openstack volume backup create ext -h
-    usage: openstack volume backups create [-h] [--name <name>]
-                                           [--description <description>]
-                                           <volume>
+    $ openstack key show 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 --debug
+    +-------------------------+--------------------------------------+
+    | Field                   | Value                                |
+    +-------------------------+--------------------------------------+
+    | ID                      | 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 |
+    | alias                   | alias_5292                           |
+    | type                    | 1                                    |
+    | status                  | Enabled                              |
+    | description             |                                      |
+    | Default Key             | False                                |
+    | Realm                   | eu-de                                |
+    | Domain ID               | bb42e2cd2b784ac4bdc350fb660a2bdb     |
+    | Creation date           | 2017-02-22 13:27:20                  |
+    | Scheduled deletion date |                                      |
+    +-------------------------+--------------------------------------+
 
-    Create new volume backup (HuaWei custom)
 
-    positional arguments:
-      <volume>              Volume to backup (name or ID)
-
-    optional arguments:
-      -h, --help            show this help message and exit
-      --name <name>         Name of the backup
-      --description <description>
-                            Description of the backup
-
-#. Create Volume Backup::
+#. Key list(查询密钥列表)::
 
     $ openstack volume backup ext create volume-telia-WS1 --name
     A1-QianBiao-Test --description=QianBiao-Test-purpose
         --os-vb-endpoint-override=https://vbs.eu-de.otc.t-systems.com
     Request Received, job id: 2c9eb2c559b8a2c2015a0e039f095821
 
-#. Restore Volume Backup::
+#. Key enable(启用密钥)::
 
-    # restore backup `A1-QianBiao-Test` for volume `volume-telia-WS1`
-    $ openstack volume backup ext restore A1-QianBiao-Test volume-telia-WS1
-    Request Received, job id: 2c9eb2c559b8a2c2015a0e039f095821
+    $ openstack key enable 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
+        --sequence=0f31a9f0-f9a2-11e6-8448-3c970e4b3294
+    Key 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 enabled
 
-#. Show volume backup job::
 
-    # show volume backup job
-    $ openstack volume backup job show 2c9eb2c559b8a2c2015a0e039f095821 --os-vb-api-version=1
-        --os-vb-endpoint-override=https://vbs.eu-de.otc.t-systems.com
-    +------------+-----------------------------------------------------------------------------------------------------------------------+
-    | Field      | Value                                                                                                                 |
-    +------------+-----------------------------------------------------------------------------------------------------------------------+
-    | Id         | 2c9eb2c559b8a2c2015a0e039f095821                                                                                      |
-    | Type       | bksCreateBackup                                                                                                       |
-    | Begin Time | 2017-02-05T11:23:22.760Z                                                                                              |
-    | End Time   | 2017-02-05T11:27:19.557Z                                                                                              |
-    | Entities   | backup_id='c6be4287-6707-4f5b-84ef-07013851b60d', bks_create_volume_name='autobk_volume_2017-02-05T11:23:36.346Z',    |
-    |            | snapshot_id='34f14aeb-cede-4e1b-8d9f-14a2c43bae9f', volume_id='a5109cba-1b1f-4d40-b3a9-753bc808b66a'                  |
-    | Status     | SUCCESS                                                                                                               |
-    +------------+-----------------------------------------------------------------------------------------------------------------------
+#. Key disable(禁用密钥)::
+
+    $ openstack key disable 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
+        --sequence=0f31a9f0-f9a2-11e6-8448-3c970e4b3294
+    Key 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 disabled
+
+#. key delete(计划删除密钥)::
+
+    $ openstack key delete b919e712-3743-4f7d-8d9e-8730a94aea0b --days=7
+    +--------+--------------------------------------+
+    | Field  | Value                                |
+    +--------+--------------------------------------+
+    | Key ID | b919e712-3743-4f7d-8d9e-8730a94aea0b |
+    | Status | Pending Deleted                      |
+    +--------+--------------------------------------+
+
+#. key cancel delete(取消计划删除密钥)::
+
+    $ openstack key cancel delete b919e712-3743-4f7d-8d9e-8730a94aea0b
+    +--------+--------------------------------------+
+    | Field  | Value                                |
+    +--------+--------------------------------------+
+    | Key ID | b919e712-3743-4f7d-8d9e-8730a94aea0b |
+    | Status | Disabled                             |
+    +--------+--------------------------------------+
+
+
+#. encrypt data create(创建数据密钥)::
+
+    $ openstack encrypt data create --key=b919e712-3743-4f7d-8d9e-8730a94aea0b
+        --context=v1=k1 --context=v2=k2
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+    | Field       | Value                                                                                                            |
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+    | Key ID      | b919e712-3743-4f7d-8d9e-8730a94aea0b                                                                             |
+    | Plain Text  | 1E08EEFF1F448C337F96DA0C47BC872CF56C21E94797F8C01905553155502B550E3EE49A512C2D3791FCA6279B794D5A59633EA6B4B7C629 |
+    |             | 1EAECEF9CDC87C49                                                                                                 |
+    | Cipher Text | 0200980070C9A6B7F45250BAAC58DF5B0E6D919668763C30E13A5798BA26D3CCBB7825AD29AAA122012978D8113428D6B86CD6981FEDB0AB |
+    |             | 5288624458BD0781CD3FB57B0AAC3D901CEF558C4899F73436BF9579011AC87E95C78F8E8716ABF5865F7F1A2FEB1AF4570D19B9F3E77659 |
+    |             | 48AA01A462393139653731322D333734332D346637642D386439652D383733306139346165613062000000000027E250019B9FE8030DD81A |
+    |             | 8A7BED06D7E6DB6F64DF530A3FED2F2980E66F47                                                                         |
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+
+
+    # create encrypt data pair without plain text returned
+    $ openstack encrypt data create --no-plain-text --key=b919e712-3743-4f7d-8d9e-8730a94aea0b --context=v1=k1 --context=v2=k2
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+    | Field       | Value                                                                                                            |
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+    | Key ID      | b919e712-3743-4f7d-8d9e-8730a94aea0b                                                                             |
+    | Cipher Text | 02009800F60C9999C6216A1FEA7DCDD4650A03DD6D40C5C4371036EDDA50934FBD67B6DA60813F879747D0C9DCBE4AA377A8CC28176E71C2 |
+    |             | ACBABAC3FE7BAFF2F03C522E29A96BC40B237F63CB5C88F43B1DD08DA5ED789484BD92EC5A31C2485D54E9DACE711EAACE99CB4A1868E1AB |
+    |             | 844366FD62393139653731322D333734332D346637642D386439652D3837333061393461656130620000000053105B3AA14552C0A1D2607C |
+    |             | 0ECC9032DD3F3517CCE325D2C2B623645519B563                                                                         |
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+
+
+#. encrypt data encrypt(加密数据密钥)::
+
+    $ openstack encrypt data encrypt --plain-text=xxxxxx --key=b919e712-3743-4f7d-8d9e-8730a94aea0b
+        --context=v1=k1 --context=v2=k2
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+    | Field       | Value                                                                                                            |
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+    | Key ID      | b919e712-3743-4f7d-8d9e-8730a94aea0b                                                                             |
+    | Cipher Text | 0200980070C9A6B7F45250BAAC58DF5B0E6D919668763C30E13A5798BA26D3CCBB7825AD29AAA122012978D8113428D6B86CD6981FEDB0AB |
+    |             | 5288624458BD0781CD3FB57B0AAC3D901CEF558C4899F73436BF9579011AC87E95C78F8E8716ABF5865F7F1A2FEB1AF4570D19B9F3E77659 |
+    |             | 48AA01A462393139653731322D333734332D346637642D386439652D383733306139346165613062000000000027E250019B9FE8030DD81A |
+    |             | 8A7BED06D7E6DB6F64DF530A3FED2F2980E66F47                                                                         |
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+
+#. encrypt data decrypt(解密数据密钥)::
+
+    $ openstack encrypt data decrypt --cipher-text=xxxxxx --key=b919e712-3743-4f7d-8d9e-8730a94aea0b
+        --context=v1=k1 --context=v2=k2
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+    | Field       | Value                                                                                                            |
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+    | Key ID      | b919e712-3743-4f7d-8d9e-8730a94aea0b                                                                             |
+    | Plain Text  | 0200980070C9A6B7F45250BAAC58DF5B0E6D919668763C30E13A5798BA26D3CCBB7825AD29AAA122012978D8113428D6B86CD6981FEDB0AB |
+    |             | 5288624458BD0781CD3FB57B0AAC3D901CEF558C4899F73436BF9579011AC87E95C78F8E8716ABF5865F7F1A2FEB1AF4570D19B9F3E77659 |
+    +-------------+------------------------------------------------------------------------------------------------------------------+
+
+#. encrypt random(创建随机数)::
+
+    $ openstack encrypt random
+    ABB030187057A4A7DF642BD7F57CE79EDB1BE3DF98E002DF753B6F53DB22FE8A33BD413BF0149BF55260EFDC7BC78446323A95704D81C77A767B25E1DBE74F7A
 
 
 Python Library Usage
 -------------------------------
 
-The full api is documented in the `Volume Backup Official Document`_ site
+The full api is documented in the `Key Manager Official Document`_ site
 
 Here's an example of listing antiddos status using Python library with keystone V3 authentication:
 
@@ -135,7 +218,7 @@ Here's an example of listing antiddos status using Python library with keystone 
 
     >>> from keystoneauth1 import session
     >>> from keystoneauth1 import client
-    >>> from kmclient.v2 import client
+    >>> from kmclient.v1 import client
 
     >>> # Use Keystone API v3 for authentication as example
     >>> auth = identity.v3.Password(auth_url=u'http://localhost:5000/v3',
@@ -151,59 +234,10 @@ Here's an example of listing antiddos status using Python library with keystone 
     >>> # Now we use the session to create a CloudEye client
     >>> client = client.Client(session=session)
 
-    >>> # Then we can access all Volume Backup API
-    >>> client.backup_mgr.create('volume-1', name='volume-1-backup')
-    {"job_id" : "xxxxx"}
+    >>> # Then we can access all Key Manager API
+    >>> client.keys.get('key-id-1')
+    <Key id=key-id-1 ....>
 
-
-
-
-    >>> from keystoneauth1 import session
-    >>> from keystoneauth1 import client
-    >>> from kmclient.v2 import client
-
-    >>> # Use Keystone API v3 for authentication as example
-    >>> auth = identity.v3.Password(auth_url=u'http://localhost:5000/v3',
-    ...                             username=u'admin_user',
-    ...                             user_domain_name=u'Default',
-    ...                             password=u'password',
-    ...                             project_name=u'demo',
-    ...                             project_domain_name=u'Default')
-
-    >>> # Next create a Keystone session using the auth plugin we just created
-    >>> session = session.Session(auth=auth)
-
-    >>> # Now we use the session to create a CloudEye client
-    >>> client = client.Client(session=session)
-
-    >>> # Then we can access all Volume Backup API
-    >>> client.backup_mgr.create('volume-1', name='volume-1-backup')
-    {"job_id" : "xxxxx"}
-
-
-
-
-    >>> from keystoneauth1 import session
-    >>> from keystoneauth1 import client
-    >>> from kmclient.v2 import client
-
-    >>> # Use Keystone API v3 for authentication as example
-    >>> auth = identity.v3.Password(auth_url=u'http://localhost:5000/v3',
-    ...                             username=u'admin_user',
-    ...                             user_domain_name=u'Default',
-    ...                             password=u'password',
-    ...                             project_name=u'demo',
-    ...                             project_domain_name=u'Default')
-
-    >>> # Next create a Keystone session using the auth plugin we just created
-    >>> session = session.Session(auth=auth)
-
-    >>> # Now we use the session to create a CloudEye client
-    >>> client = client.Client(session=session)
-
-    >>> # Then we can access all Volume Backup API
-    >>> client.backup_mgr.create('volume-1', name='volume-1-backup')
-    {"job_id" : "xxxxx"}
 
 
 .. note::
@@ -215,9 +249,9 @@ Here's an example of listing antiddos status using Python library with keystone 
 
 * License: Apache License, Version 2.0
 * `OpenStack Client`_
-* `Volume Backup Official Document`_
+* `Key Manager Official Document`_
 * `KeyStone`_
 
 .. _OpenStack Client: https://github.com/openstack/python-openstackclient
-.. _Volume Backup Official Document: http://support.hwclouds.com/vbs/
+.. _Key Manager Official Document: http://support.hwclouds.com/kms/index.html
 .. _KeyStone: http://docs.openstack.org/developer/keystoneauth/

@@ -12,37 +12,61 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 #
-from osc_lib import utils
 
 from kmclient.common import display
 from kmclient.common import resource
+from kmclient.common import utils
 
 
-class Job(resource.Resource, display.Display):
-    """Volume Backup Job resource instance"""
+class Key(resource.Resource, display.Display):
+    """Key Manager Key resource instance"""
 
     show_column_names = [
-        "Id",
-        "Type",
-        "Begin Time",
-        "End Time",
-        "Entities",
-        "Status",
+        "ID",
+        "alias",
+        "type",
+        "status",
+        "description",
+        "Default Key",
+        "Realm",
+        "Domain ID",
+        "Creation date",
+        "Scheduled deletion date",
     ]
 
-    column_2_property = {
-        "Id": "job_id",
-        "Type": "job_type",
-    }
-
     formatter = {
-        "Entities": utils.format_dict
+        "Creation date": utils.format_time,
+        "Scheduled deletion date": utils.format_time,
     }
 
-    def get_show_column_names(self):
-        column_names = self.show_column_names[:]
-        if "fail_reason" in self.original and self.fail_reason:
-            column_names.insert(5, "Fail Reason")
-        if "error_code" in self.original and self.error_code:
-            column_names.insert(5, "Error Code")
-        return column_names
+    column_2_property = {
+        "alias": "key_alias",
+        "type": "key_type",
+    }
+
+    @property
+    def id(self):
+        return self.key_id
+
+    @property
+    def status(self):
+        if self.key_state == "2":
+            return "Enabled"
+        if self.key_state == "3":
+            return "Disabled"
+        if self.key_state == "4":
+            return "Pending Deleted"
+
+    @property
+    def default_key(self):
+        return self.default_key_flag == "1"
+
+
+class EncryptData(resource.Resource, display.Display):
+    """encryption data pair instance"""
+
+    show_column_names = [
+        "Key ID",
+        "Plain Text",
+        "Cipher Text",
+    ]
