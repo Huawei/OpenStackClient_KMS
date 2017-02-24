@@ -18,6 +18,7 @@ from kmclient.common.i18n import _
 
 
 class BaseParser(object):
+
     @staticmethod
     def register_service_option(parser, service_type):
         service_env = service_type.upper().replace('-', '_')
@@ -41,3 +42,29 @@ class BaseParser(object):
             help=(_('Endpoint to use for the {service_type} service'
                     ' instead of the endpoint in the catalog').format(
                 service_type=service_type)))
+
+    @staticmethod
+    def add_limit_opt(parser):
+        parser.add_argument(
+            "--limit",
+            metavar="<limit>",
+            type=int,
+            help=_("Limit the number of records returned")
+        )
+
+    @staticmethod
+    def add_offset_opt(parser):
+        parser.add_argument(
+            "--offset",
+            metavar="<offset>",
+            type=int,
+            help=_("Skipped records number (pagination)")
+        )
+
+    @staticmethod
+    def add_seq_opt(parser):
+        parser.add_argument(
+            "--sequence",
+            metavar="<sequence>",
+            help=_("Request-sequence-id (36 bit), used to trace request")
+        )

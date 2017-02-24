@@ -21,7 +21,7 @@ from kmclient.tests import base
 
 
 class TestCloudEyePlugin(base.BaseTestCase):
-    @mock.patch('kmclient.v2.client.Client')
+    @mock.patch('kmclient.v1.client.Client')
     def test_make_client_with_session(self, client):
         instance = mock.Mock()
         instance._api_version = {plugin.API_NAME: plugin.DEFAULT_API_VERSION}

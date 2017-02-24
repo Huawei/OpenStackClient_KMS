@@ -16,10 +16,10 @@ import mock
 from osc_lib import utils
 from kmclient.common import resource
 
-from kmclient.osc.v2 import backup
+from kmclient.osc.v1 import backup
 from kmclient.tests import base
-from kmclient.v2 import backup_mgr
-from kmclient.v2 import restore_mgr
+from kmclient.v1 import backup_mgr
+from kmclient.v1 import restore_mgr
 
 
 @mock.patch.object(backup_mgr.VolumeBackupManager, "_create")

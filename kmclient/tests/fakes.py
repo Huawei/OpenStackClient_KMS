@@ -22,10 +22,10 @@ from kmclient.common import manager
 from kmclient.common import resource as r
 from kmclient.common import utils
 from kmclient.v1 import job_mgr
-from kmclient.v2 import backup_mgr
+from kmclient.v1 import backup_mgr
 
 # fake request id
-from kmclient.v2 import restore_mgr
+from kmclient.v1 import restore_mgr
 
 FAKE_REQUEST_ID = 'req-0594c66b-6973-405c-ae2c-43fcfc00f2e3'
 

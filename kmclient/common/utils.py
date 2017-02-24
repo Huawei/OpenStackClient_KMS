@@ -43,6 +43,7 @@ def str_range(start, end):
 
 def format_time(time_in_long, _format='%Y-%m-%d %H:%M:%S'):
     if time_in_long:
+        time_in_long = int(time_in_long)
         # if time-long is with mill seconds
         if time_in_long > pow(10, 12):
             time_in_long /= 1000
