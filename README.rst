@@ -217,7 +217,7 @@ Here's an example of listing antiddos status using Python library with keystone 
 .. code:: python
 
     >>> from keystoneauth1 import session
-    >>> from keystoneauth1 import client
+    >>> from keystoneauth1 import identity
     >>> from kmclient.v1 import client
 
     >>> # Use Keystone API v3 for authentication as example
@@ -236,7 +236,7 @@ Here's an example of listing antiddos status using Python library with keystone 
 
     >>> # Then we can access all Key Manager API
     >>> client.keys.get('key-id-1')
-    <Key id=key-id-1 ....>
+    <Key creation_date=1487741240000 .....>
 
 
 
