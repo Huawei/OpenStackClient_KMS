@@ -91,11 +91,11 @@ class DecryptData(command.ShowOne):
     def take_action(self, args):
         mgr = self.app.client_manager.key_manager.encryption
         kwargs = {
-            "plain_text": args.plain_text,
+            "cipher_text": args.cipher_text,
             "context": args.context,
             "sequence": args.sequence,
         }
-        data = mgr.encrypt_data(args.key, **kwargs)
+        data = mgr.decrypt_data(args.key, **kwargs)
         columns = ["Key", "Digest", ]
         output = [data.data_key, data.datakey_dgst]
         return columns, output

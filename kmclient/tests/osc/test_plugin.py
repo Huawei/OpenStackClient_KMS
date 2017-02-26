@@ -20,7 +20,8 @@ from kmclient.osc import plugin
 from kmclient.tests import base
 
 
-class TestCloudEyePlugin(base.BaseTestCase):
+class TestKeyManagerPlugin(base.BaseTestCase):
+
     @mock.patch('kmclient.v1.client.Client')
     def test_make_client_with_session(self, client):
         instance = mock.Mock()
@@ -29,7 +30,7 @@ class TestCloudEyePlugin(base.BaseTestCase):
         instance._cli_options = mock.Mock()
         instance._cli_options.config = mock.Mock()
         instance._cli_options.config.get.return_value = (
-            "http://volume-backup.endpoint"
+            "http://key-manager.endpoint"
         )
         instance.region_name = fakes.REGION_NAME
         instance.interface = fakes.INTERFACE
@@ -37,7 +38,7 @@ class TestCloudEyePlugin(base.BaseTestCase):
 
         client.assert_called_once_with(
             instance.session,
-            "http://volume-backup.endpoint",
+            "http://key-manager.endpoint",
             region_name=fakes.REGION_NAME,
             interface=fakes.INTERFACE,
         )
@@ -46,10 +47,10 @@ class TestCloudEyePlugin(base.BaseTestCase):
         parser = argparse.ArgumentParser(description='TestUnit')
         plugin.build_option_parser(parser)
 
-        parsed = parser.parse_args(['--os-vb-api-version',
+        parsed = parser.parse_args(['--os-km-api-version',
                                     '1',
-                                    '--os-vb-endpoint-override',
-                                    'http://volume-backup.endpoint'])
-        self.assertEqual(parsed.os_vb_api_version, "1")
-        self.assertEqual(parsed.os_vb_endpoint_override,
-                         'http://volume-backup.endpoint')
+                                    '--os-km-endpoint-override',
+                                    'http://key-manager.endpoint'])
+        self.assertEqual(parsed.os_km_api_version, "1")
+        self.assertEqual(parsed.os_km_endpoint_override,
+                         'http://key-manager.endpoint')

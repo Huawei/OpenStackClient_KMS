@@ -12,8 +12,8 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 #
-
 import mock
+
 from oslo_serialization import jsonutils
 from requests import Response
 
@@ -21,12 +21,11 @@ from kmclient.common import display
 from kmclient.common import manager
 from kmclient.common import resource as r
 from kmclient.common import utils
-from kmclient.v1 import job_mgr
-from kmclient.v1 import backup_mgr
+from kmclient.v1 import encryption_mgr
+from kmclient.v1 import key_mgr
+
 
 # fake request id
-from kmclient.v1 import restore_mgr
-
 FAKE_REQUEST_ID = 'req-0594c66b-6973-405c-ae2c-43fcfc00f2e3'
 
 # fake resource id
@@ -118,12 +117,9 @@ class FakeHTTPResponse(object):
         return jsonutils.loads(self.content)
 
 
-class FakeVolumeBackupClient(object):
-
-    def __init__(self, **kwargs):
+class FakeKeyManagerClient(object):
+    def __init__(self):
         self.fake_http_client = mock.Mock()
-        self.backup_mgr = backup_mgr.VolumeBackupManager(self.fake_http_client)
-        self.restore_mgr = restore_mgr.VolumeBackupRestoreManager(
-            self.fake_http_client
-        )
-        self.job_mgr = job_mgr.JobManager(self.fake_http_client)
+        self.keys = key_mgr.KeyManager(self.fake_http_client)
+        self.encryption = encryption_mgr.EncryptionManager(
+            self.fake_http_client)

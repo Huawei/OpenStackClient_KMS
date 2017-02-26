@@ -17,6 +17,7 @@ import mock
 from osc_lib.tests import utils
 
 from kmclient.tests import fakes
+from kmclient.v1 import resource
 
 
 class BaseTestCase(utils.TestCommand):
@@ -24,17 +25,19 @@ class BaseTestCase(utils.TestCommand):
     pass
 
 
-class VolumeBackupBaseTestCase(BaseTestCase):
+class KeyManagerBaseTestCase(BaseTestCase):
     """Base test case class for HuaWei Volume Backup management API."""
 
     def __init__(self, *args, **kwargs):
-        super(VolumeBackupBaseTestCase, self).__init__(*args, **kwargs)
+        super(KeyManagerBaseTestCase, self).__init__(*args, **kwargs)
         self.cmd = None
+        self.mini_key = None
 
     def setUp(self):
-        super(VolumeBackupBaseTestCase, self).setUp()
-        fake_vb_client = fakes.FakeVolumeBackupClient()
-        self.app.client_manager.volume_backup = fake_vb_client
-        self.app.client_manager.volume = mock.Mock(
-            volumes=mock.Mock(), backups=mock.Mock()
-        )
+        super(KeyManagerBaseTestCase, self).setUp()
+        fake_km_client = fakes.FakeKeyManagerClient()
+        self.app.client_manager.key_manager = fake_km_client
+        self.mini_key = resource.Key(None, {
+            "key_id": "bb6a3d22-dc93-47ac-b5bd-88df7ad35f1e",
+            "domain_id": "b168fe00ff56492495a7d22974df2d0b"
+        })

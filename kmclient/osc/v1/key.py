@@ -13,14 +13,12 @@
 #
 import logging
 
-from osc_lib import utils
-
-from kmclient.v1 import resource
 from osc_lib.command import command
 
 from kmclient.common import parser_builder as bpb
 from kmclient.common.i18n import _
 from kmclient.v1 import parser_builder as pb
+from kmclient.v1 import resource
 
 LOG = logging.getLogger(__name__)
 
