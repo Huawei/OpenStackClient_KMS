@@ -75,8 +75,9 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 1. key create(创建密钥)::
 
-    $ openstack key create woo-test-3 --realm=eu-de --type=xxx --description=desc
-        --policy=policy --usage=usage --debug
+    $ openstack kms key create --alias qianbiao-ng --realm eu-de --description desc
+        --policy '{"key":"value"}' --usage usage --type keytype
+        --sequence 919c82d4-8046-4722-9094-35c3c6524cff
     +-----------+--------------------------------------+
     | Field     | Value                                |
     +-----------+--------------------------------------+
@@ -85,9 +86,9 @@ Key Manager Client contains commands list below, use -h option to get more usage
     +-----------+--------------------------------------+
 
 
-#. Key show(查询密钥信息)::
+#. Key describe(查询密钥信息)::
 
-    $ openstack key show 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 --debug
+    $ openstack key describe 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
     +-------------------------+--------------------------------------+
     | Field                   | Value                                |
     +-------------------------+--------------------------------------+
@@ -126,7 +127,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. key delete(计划删除密钥)::
 
-    $ openstack key delete b919e712-3743-4f7d-8d9e-8730a94aea0b --days=7
+    $ openstack kms key schedule deletion b919e712-3743-4f7d-8d9e-8730a94aea0b --pending-days=7
     +--------+--------------------------------------+
     | Field  | Value                                |
     +--------+--------------------------------------+
@@ -136,7 +137,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. key cancel delete(取消计划删除密钥)::
 
-    $ openstack key cancel delete b919e712-3743-4f7d-8d9e-8730a94aea0b
+    $ openstack kms key cancel deletion b919e712-3743-4f7d-8d9e-8730a94aea0b
     +--------+--------------------------------------+
     | Field  | Value                                |
     +--------+--------------------------------------+
@@ -145,10 +146,10 @@ Key Manager Client contains commands list below, use -h option to get more usage
     +--------+--------------------------------------+
 
 
-#. encrypt data create(创建数据密钥)::
+#. datakey create(创建数据密钥)::
 
-    $ openstack encrypt data create --key=b919e712-3743-4f7d-8d9e-8730a94aea0b
-        --context=v1=k1 --context=v2=k2
+    $ openstack kms datakey create --key=b919e712-3743-4f7d-8d9e-8730a94aea0b
+        --encryption-context=v1=k1 --encryption-context=v2=k2 --datakey-length=512
     +-------------+------------------------------------------------------------------------------------------------------------------+
     | Field       | Value                                                                                                            |
     +-------------+------------------------------------------------------------------------------------------------------------------+
@@ -163,7 +164,8 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 
     # create encrypt data pair without plain text returned
-    $ openstack encrypt data create --no-plain-text --key=b919e712-3743-4f7d-8d9e-8730a94aea0b --context=v1=k1 --context=v2=k2
+    $ openstack kms datakey create --key=b919e712-3743-4f7d-8d9e-8730a94aea0b  --datakey-length=512
+        --without-plain-text --encryption-context=v1=k1 --encryption-context=v2=k2
     +-------------+------------------------------------------------------------------------------------------------------------------+
     | Field       | Value                                                                                                            |
     +-------------+------------------------------------------------------------------------------------------------------------------+
@@ -175,10 +177,10 @@ Key Manager Client contains commands list below, use -h option to get more usage
     +-------------+------------------------------------------------------------------------------------------------------------------+
 
 
-#. encrypt data encrypt(加密数据密钥)::
+#. datakey encrypt(加密数据密钥)::
 
-    $ openstack encrypt data encrypt --plain-text=xxxxxx --key=b919e712-3743-4f7d-8d9e-8730a94aea0b
-        --context=v1=k1 --context=v2=k2
+    $ openstack kms datakey encrypt --key-id 0d0466b0-e727-4d9c-b35d-f84bb474a37f
+        --encryption-context=k1=v1 --plain-text plaintext --datakey-plain-length 64
     +-------------+------------------------------------------------------------------------------------------------------------------+
     | Field       | Value                                                                                                            |
     +-------------+------------------------------------------------------------------------------------------------------------------+
@@ -189,10 +191,10 @@ Key Manager Client contains commands list below, use -h option to get more usage
     |             | 8A7BED06D7E6DB6F64DF530A3FED2F2980E66F47                                                                         |
     +-------------+------------------------------------------------------------------------------------------------------------------+
 
-#. encrypt data decrypt(解密数据密钥)::
+#. datakey decrypt(解密数据密钥)::
 
-    $ openstack encrypt data decrypt --cipher-text=xxxxxx --key=b919e712-3743-4f7d-8d9e-8730a94aea0b
-        --context=v1=k1 --context=v2=k2
+    $ openstack kms datakey decrypt --cipher-text=xxxxxx --key-id=b919e712-3743-4f7d-8d9e-8730a94aea0b
+        --encryption-context=v1=k1 --encryption-context=v2=k2 --datakey-cipher-length=64
     +-------------+------------------------------------------------------------------------------------------------------------------+
     | Field       | Value                                                                                                            |
     +-------------+------------------------------------------------------------------------------------------------------------------+
@@ -201,9 +203,9 @@ Key Manager Client contains commands list below, use -h option to get more usage
     |             | 5288624458BD0781CD3FB57B0AAC3D901CEF558C4899F73436BF9579011AC87E95C78F8E8716ABF5865F7F1A2FEB1AF4570D19B9F3E77659 |
     +-------------+------------------------------------------------------------------------------------------------------------------+
 
-#. encrypt random(创建随机数)::
+#. random generate(创建随机数)::
 
-    $ openstack encrypt random
+    $ openstack kms random generate --random-data-length 512 --sequence 919c82d4-8046-4722-9094-35c3c6524cff
     ABB030187057A4A7DF642BD7F57CE79EDB1BE3DF98E002DF753B6F53DB22FE8A33BD413BF0149BF55260EFDC7BC78446323A95704D81C77A767B25E1DBE74F7A
 
 

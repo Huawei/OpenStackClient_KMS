@@ -28,7 +28,7 @@ class TestCreateKey(base.KeyManagerBaseTestCase):
 
     def test_create_key(self, mocked_create):
         args = [
-            "new-key-name",
+            "--alias", "new-key-name",
             "--realm", "cn-north-1",
             "--description", "unittests",
             "--sequence", "ThisIsA36BitSequence",

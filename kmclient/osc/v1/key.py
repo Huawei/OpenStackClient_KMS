@@ -28,7 +28,7 @@ class CreateKey(command.ShowOne):
 
     def get_parser(self, prog_name):
         parser = super(CreateKey, self).get_parser(prog_name)
-        pb.Key.add_alias_arg(parser)
+        pb.Key.add_alias_opt(parser)
         pb.Key.add_realm_opt(parser)
         pb.Key.add_desc_opt(parser)
         pb.Key.add_policy_opt(parser)

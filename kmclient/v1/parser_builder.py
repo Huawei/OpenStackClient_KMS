@@ -30,10 +30,11 @@ class Key(object):
         )
 
     @staticmethod
-    def add_alias_arg(parser):
+    def add_alias_opt(parser):
         parser.add_argument(
-            "alias",
+            "--alias",
             metavar="<alias>",
+            required=True,
             help=_("Key alias name, should match regex "
                    "'^[a-zAZ0-9:/_-]{1,255}$', and not end with '/default' "
                    "which has been used by system")
@@ -131,7 +132,7 @@ class Encryption(object):
     @staticmethod
     def add_key_id_opt(parser):
         parser.add_argument(
-            "--key",
+            "--key-id",
             metavar="<key-id>",
             required=True,
             help=_("Key used for encrypt/decrypt (ID)")
