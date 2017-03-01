@@ -63,7 +63,7 @@ class Key(resource.Resource, display.Display):
 
 
 class EncryptData(resource.Resource, display.Display):
-    """encryption data pair instance"""
+    """datakeys data pair instance"""
 
     show_column_names = [
         "Key ID",

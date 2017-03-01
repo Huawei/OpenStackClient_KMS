@@ -14,23 +14,25 @@
 import mock
 
 from kmclient.common import resource as br
-from kmclient.osc.v1 import encryption
+from kmclient.osc.v1 import datakey
 from kmclient.tests import base
-from kmclient.v1 import encryption_mgr
+from kmclient.v1 import datakey_mgr
 from kmclient.v1 import resource
 
 
-@mock.patch.object(encryption_mgr.EncryptionManager, "_create")
-class TestRandom(base.KeyManagerBaseTestCase):
+@mock.patch.object(datakey_mgr.DatakeyManager, "_create")
+class TestRandomGenerate(base.KeyManagerBaseTestCase):
     def setUp(self):
-        super(TestRandom, self).setUp()
-        self.cmd = encryption.RandomData(self.app, None)
+        super(TestRandomGenerate, self).setUp()
+        self.cmd = datakey.RandomGenerate(self.app, None)
 
     def test_random(self, mocked_create):
         args = [
+            "--random-data-length", "128",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
+            ("random_data_length", 128),
             ("sequence", "ThisIsA36BitSequence"),
         ]
         parsed_args = self.check_parser(
@@ -47,7 +49,7 @@ class TestRandom(base.KeyManagerBaseTestCase):
         result = self.cmd.take_action(parsed_args)
 
         json = {
-            "random_data_length": "512",
+            "random_data_length": 128,
             "sequence": "ThisIsA36BitSequence",
         }
         mocked_create.assert_called_once_with(
@@ -56,22 +58,24 @@ class TestRandom(base.KeyManagerBaseTestCase):
         self.assertEqual(random_["random_data"], result)
 
 
-@mock.patch.object(encryption_mgr.EncryptionManager, "_create")
-class TestEncryptDataCreate(base.KeyManagerBaseTestCase):
+@mock.patch.object(datakey_mgr.DatakeyManager, "_create")
+class TestCreateDatakey(base.KeyManagerBaseTestCase):
     def setUp(self):
-        super(TestEncryptDataCreate, self).setUp()
-        self.cmd = encryption.CreateEncryptData(self.app, None)
+        super(TestCreateDatakey, self).setUp()
+        self.cmd = datakey.CreateDatakey(self.app, None)
 
     def test_create_encrypt_data(self, mocked_create):
         args = [
             "--key", "key-id",
-            "--context", "k1=v1",
-            "--context", "k2=v2",
+            "--datakey-length", "512",
+            "--encryption-context", "k1=v1",
+            "--encryption-context", "k2=v2",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
             ("key", "key-id"),
-            ("context", dict(k1="v1", k2="v2")),
+            ("datakey_length", 512),
+            ("encryption_context", dict(k1="v1", k2="v2")),
             ("sequence", "ThisIsA36BitSequence"),
         ]
         parsed_args = self.check_parser(
@@ -89,7 +93,7 @@ class TestEncryptDataCreate(base.KeyManagerBaseTestCase):
         json = {
             "key_id": "key-id",
             "encryption_context": dict(k1="v1", k2="v2"),
-            "datakey_length": "512",
+            "datakey_length": 512,
             "sequence": "ThisIsA36BitSequence",
         }
         mocked_create.assert_called_once_with(
@@ -105,15 +109,15 @@ class TestEncryptDataCreate(base.KeyManagerBaseTestCase):
     def test_create_encrypt_data_no_plain_text(self, mocked_create):
         args = [
             "--key", "key-id",
-            "--context", "k1=v1",
-            "--context", "k2=v2",
-            "--no-plain-text",
+            "--encryption-context", "k1=v1",
+            "--encryption-context", "k2=v2",
+            "--without-plain-text",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
             ("key", "key-id"),
-            ("no_plain_text", True),
-            ("context", dict(k1="v1", k2="v2")),
+            ("without_plain_text", True),
+            ("encryption_context", dict(k1="v1", k2="v2")),
             ("sequence", "ThisIsA36BitSequence"),
         ]
         parsed_args = self.check_parser(
@@ -130,7 +134,7 @@ class TestEncryptDataCreate(base.KeyManagerBaseTestCase):
         json = {
             "key_id": "key-id",
             "encryption_context": dict(k1="v1", k2="v2"),
-            "datakey_length": "512",
+            "datakey_length": 512,
             "sequence": "ThisIsA36BitSequence",
         }
         mocked_create.assert_called_once_with(
@@ -143,24 +147,26 @@ class TestEncryptDataCreate(base.KeyManagerBaseTestCase):
         self.assertEqual(expected, data)
 
 
-@mock.patch.object(encryption_mgr.EncryptionManager, "_create")
-class TestEncryptData(base.KeyManagerBaseTestCase):
+@mock.patch.object(datakey_mgr.DatakeyManager, "_create")
+class TestEncryptDatakey(base.KeyManagerBaseTestCase):
     def setUp(self):
-        super(TestEncryptData, self).setUp()
-        self.cmd = encryption.EncryptData(self.app, None)
+        super(TestEncryptDatakey, self).setUp()
+        self.cmd = datakey.EncryptDatakey(self.app, None)
 
     def test_encrypt(self, mocked_create):
         args = [
             "--key", "key-id",
-            "--context", "k1=v1",
-            "--context", "k2=v2",
+            "--datakey-plain-length", "64",
+            "--encryption-context", "k1=v1",
+            "--encryption-context", "k2=v2",
             "--plain-text", "some-plain-text",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
             ("key", "key-id"),
             ("plain_text", "some-plain-text"),
-            ("context", dict(k1="v1", k2="v2")),
+            ("datakey_plain_length", 64),
+            ("encryption_context", dict(k1="v1", k2="v2")),
             ("sequence", "ThisIsA36BitSequence"),
         ]
         parsed_args = self.check_parser(
@@ -179,7 +185,7 @@ class TestEncryptData(base.KeyManagerBaseTestCase):
             "key_id": "key-id",
             "plain_text": "some-plain-text",
             "encryption_context": dict(k1="v1", k2="v2"),
-            "datakey_plain_length": "64",
+            "datakey_plain_length": 64,
             "sequence": "ThisIsA36BitSequence",
         }
         mocked_create.assert_called_once_with(
@@ -190,24 +196,24 @@ class TestEncryptData(base.KeyManagerBaseTestCase):
         self.assertEqual(['Key ID', 'Cipher Text'], columns)
 
 
-@mock.patch.object(encryption_mgr.EncryptionManager, "_create")
-class TestDecryptData(base.KeyManagerBaseTestCase):
+@mock.patch.object(datakey_mgr.DatakeyManager, "_create")
+class TestDecryptDatakey(base.KeyManagerBaseTestCase):
     def setUp(self):
-        super(TestDecryptData, self).setUp()
-        self.cmd = encryption.DecryptData(self.app, None)
+        super(TestDecryptDatakey, self).setUp()
+        self.cmd = datakey.DecryptDatakey(self.app, None)
 
     def test_decrypt(self, mocked_create):
         args = [
             "--key", "key-id",
-            "--context", "k1=v1",
-            "--context", "k2=v2",
+            "--encryption-context", "k1=v1",
+            "--encryption-context", "k2=v2",
             "--cipher-text", "some-cipher-text",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
             ("key", "key-id"),
             ("cipher_text", "some-cipher-text"),
-            ("context", dict(k1="v1", k2="v2")),
+            ("encryption_context", dict(k1="v1", k2="v2")),
             ("sequence", "ThisIsA36BitSequence"),
         ]
         parsed_args = self.check_parser(
@@ -226,7 +232,7 @@ class TestDecryptData(base.KeyManagerBaseTestCase):
             "key_id": "key-id",
             "cipher_text": "some-cipher-text",
             "encryption_context": dict(k1="v1", k2="v2"),
-            "datakey_plain_length": "64",
+            "datakey_cipher_length": 64,
             "sequence": "ThisIsA36BitSequence",
         }
         mocked_create.assert_called_once_with(

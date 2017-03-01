@@ -14,7 +14,7 @@
 #
 import logging
 
-from kmclient.v1 import encryption_mgr
+from kmclient.v1 import datakey_mgr
 
 LOGGER = logging.getLogger(__name__)
 
@@ -55,4 +55,4 @@ class Client(object):
             session, endpoint, **kwargs
         )
         self.keys = key_mgr.KeyManager(self.client)
-        self.encryption = encryption_mgr.EncryptionManager(self.client)
+        self.datakeys = datakey_mgr.DatakeyManager(self.client)

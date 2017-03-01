@@ -57,37 +57,37 @@ class Key(object):
             help=_("Key description (length 0-255)")
         )
 
-    # @staticmethod
-    # def add_policy_opt(parser):
-    #     parser.add_argument(
-    #         "--policy",
-    #         metavar="<key-policy>",
-    #         required=False,
-    #         help=_("Key policy (length 0-255)")
-    #     )
-    #
-    # @staticmethod
-    # def add_usage_opt(parser):
-    #     parser.add_argument(
-    #         "--usage",
-    #         metavar="<key-usage>",
-    #         required=False,
-    #         help=_("Key usage (default: Encrypt_Decrypt)")
-    #     )
-    #
-    # @staticmethod
-    # def add_type_opt(parser):
-    #     parser.add_argument(
-    #         "--type",
-    #         metavar="<key-type>",
-    #         required=False,
-    #         help=_("Key type")
-    #     )
+    @staticmethod
+    def add_policy_opt(parser):
+        parser.add_argument(
+            "--policy",
+            metavar="<key-policy>",
+            required=False,
+            help=_("Key policy (length 0-255, json format)")
+        )
+
+    @staticmethod
+    def add_usage_opt(parser):
+        parser.add_argument(
+            "--usage",
+            metavar="<key-usage>",
+            required=False,
+            help=_("Key usage (default: Encrypt_Decrypt)")
+        )
+
+    @staticmethod
+    def add_type_opt(parser):
+        parser.add_argument(
+            "--type",
+            metavar="<key-type>",
+            required=False,
+            help=_("Key type")
+        )
 
     @staticmethod
     def add_days_opt(parser):
         parser.add_argument(
-            "--days",
+            "--pending-days",
             metavar="<number>",
             required=True,
             type=parsetypes.int_range_type(7, 1096),
@@ -100,12 +100,14 @@ class Encryption(object):
     @staticmethod
     def add_context_opt(parser):
         parser.add_argument(
-            "--context",
-            metavar="<key:value>",
+            "--encryption-context",
+            metavar="<key=value>",
             required=False,
             action=parseractions.KeyValueAction,
-            help=_("Encryption context "
-                   "(Repeat option to set multiple context)")
+            help=_("Name-value pair that specifies the encryption context to "
+                   "be used for authenticated encryption. If used here, "
+                   "the same value must be supplied to the decrypt API "
+                   "or decryption will fail.")
         )
 
     @staticmethod
@@ -136,11 +138,51 @@ class Encryption(object):
         )
 
     @staticmethod
-    def add_no_plain_text_opt(parser):
+    def add_without_plain_text_opt(parser):
         parser.add_argument(
-            "--no-plain-text",
+            "--without-plain-text",
             required=False,
             default=False,
             action="store_true",
             help=_("Do not show plain text")
+        )
+
+    @staticmethod
+    def add_random_data_len_opt(parser):
+        parser.add_argument(
+            "--random-data-length",
+            metavar="<length>",
+            type=int,
+            default=512,
+            help=_("The length of the random byte string")
+        )
+
+    @staticmethod
+    def add_datakey_length_opt(parser):
+        parser.add_argument(
+            "--datakey-length",
+            metavar="<length>",
+            type=int,
+            default=512,
+            help=_("The length of the data encryption key in bytes")
+        )
+
+    @staticmethod
+    def add_datakey_plain_length_opt(parser):
+        parser.add_argument(
+            "--datakey-plain-length",
+            metavar="<length>",
+            type=int,
+            default=64,
+            help=_("DEK plain text length")
+        )
+
+    @staticmethod
+    def add_datakey_cipher_length_opt(parser):
+        parser.add_argument(
+            "--datakey-cipher-length",
+            metavar="<length>",
+            type=int,
+            default=64,
+            help=_("DEK cipher text length")
         )

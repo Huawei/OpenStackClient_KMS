@@ -21,7 +21,7 @@ from kmclient.common import display
 from kmclient.common import manager
 from kmclient.common import resource as r
 from kmclient.common import utils
-from kmclient.v1 import encryption_mgr
+from kmclient.v1 import datakey_mgr
 from kmclient.v1 import key_mgr
 
 
@@ -121,5 +121,5 @@ class FakeKeyManagerClient(object):
     def __init__(self):
         self.fake_http_client = mock.Mock()
         self.keys = key_mgr.KeyManager(self.fake_http_client)
-        self.encryption = encryption_mgr.EncryptionManager(
+        self.datakeys = datakey_mgr.DatakeyManager(
             self.fake_http_client)

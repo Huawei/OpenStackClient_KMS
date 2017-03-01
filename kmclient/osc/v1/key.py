@@ -31,9 +31,9 @@ class CreateKey(command.ShowOne):
         pb.Key.add_alias_arg(parser)
         pb.Key.add_realm_opt(parser)
         pb.Key.add_desc_opt(parser)
-        # pb.Key.add_policy_opt(parser)
-        # pb.Key.add_usage_opt(parser)
-        # pb.Key.add_type_opt(parser)
+        pb.Key.add_policy_opt(parser)
+        pb.Key.add_usage_opt(parser)
+        pb.Key.add_type_opt(parser)
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 
@@ -41,9 +41,9 @@ class CreateKey(command.ShowOne):
         mgr = self.app.client_manager.key_manager.keys
         kwargs = {
             "description": args.description,
-            # "policy": args.policy,
-            # "usage": args.usage,
-            # "key_type": args.type,
+            "policy": args.policy,
+            "usage": args.usage,
+            "key_type": args.type,
             "sequence": args.sequence,
         }
         key = mgr.create(args.alias, args.realm, **kwargs)
@@ -69,12 +69,12 @@ class ListKey(command.Lister):
         return ["Key ID"], [[key, ] for key in result["keys"]]
 
 
-class ShowKey(command.ShowOne):
-    _description = _("Show key detail")
+class DescribeKey(command.ShowOne):
+    _description = _("describe key")
 
     def get_parser(self, prog_name):
-        parser = super(ShowKey, self).get_parser(prog_name)
-        pb.Key.add_key_id_arg(parser, 'display')
+        parser = super(DescribeKey, self).get_parser(prog_name)
+        pb.Key.add_key_id_arg(parser, 'describe')
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 
@@ -117,11 +117,11 @@ class DisableKey(command.Command):
         return "Key %s disabled" % key.id
 
 
-class DeleteKey(command.ShowOne):
+class ScheduleDeletionKey(command.ShowOne):
     _description = _("delete key by schedule")
 
     def get_parser(self, prog_name):
-        parser = super(DeleteKey, self).get_parser(prog_name)
+        parser = super(ScheduleDeletionKey, self).get_parser(prog_name)
         pb.Key.add_key_id_arg(parser, 'delete')
         pb.Key.add_days_opt(parser)
         bpb.BaseParser.add_seq_opt(parser)
@@ -129,17 +129,17 @@ class DeleteKey(command.ShowOne):
 
     def take_action(self, args):
         mgr = self.app.client_manager.key_manager.keys
-        key = mgr.delete(args.key, args.days, sequence=args.sequence)
+        key = mgr.delete(args.key, args.pending_days, sequence=args.sequence)
         columns = ["Key ID", "Status"]
         output = key.get_display_data(columns)
         return columns, output
 
 
-class CancelDeleteKey(command.ShowOne):
+class CancelDeletionKey(command.ShowOne):
     _description = _("cancel delete key")
 
     def get_parser(self, prog_name):
-        parser = super(CancelDeleteKey, self).get_parser(prog_name)
+        parser = super(CancelDeletionKey, self).get_parser(prog_name)
         pb.Key.add_key_id_arg(parser, 'cancel delete')
         bpb.BaseParser.add_seq_opt(parser)
         return parser

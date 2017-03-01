@@ -47,9 +47,13 @@ class KeyManager(manager.Manager):
         message = _("No Key with ID '%s' exists.") % name
         raise exceptions.NotFound(message)
 
-    def create(self, alias, realm, description=None, sequence=None):
+    def create(self, alias, realm, description=None, policy=None, usage=None,
+               key_type=None, sequence=None):
         """
 
+        :param key_type:
+        :param usage:
+        :param policy:
         :param alias:
         :param realm:
         :param description:
@@ -60,9 +64,9 @@ class KeyManager(manager.Manager):
             "key_alias": alias,
             "realm": realm,
             "key_description": description,
-            # "key_policy": policy,
-            # "key_usage": usage,
-            # "key_type": key_type,
+            "key_policy": policy,
+            "key_usage": usage,
+            "key_type": key_type,
             "sequence": sequence,
         })
         return self._create('/create-key', json=json, key="key_info")
@@ -121,17 +125,17 @@ class KeyManager(manager.Manager):
         })
         return self._create("/disable-key", json=json, key="key_info")
 
-    def delete(self, key_id, days, sequence=None):
+    def delete(self, key_id, pending_days, sequence=None):
         """delete key
 
         :param key_id:
-        :param days: delete after days
+        :param pending_days: delete after days
         :param sequence:
         :return:
         """
         json = utils.remove_empty_from_dict({
             "key_id": key_id,
-            "pending_days": days,
+            "pending_days": pending_days,
             "sequence": sequence,
         })
         return self._create("/schedule-key-deletion", json=json)

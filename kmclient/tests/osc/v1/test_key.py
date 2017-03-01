@@ -109,12 +109,12 @@ class TestListKey(base.KeyManagerBaseTestCase):
 
 
 @mock.patch.object(key_mgr.KeyManager, "_create")
-class TestShowKey(base.KeyManagerBaseTestCase):
+class TestDescribeKey(base.KeyManagerBaseTestCase):
     def setUp(self):
-        super(TestShowKey, self).setUp()
-        self.cmd = key.ShowKey(self.app, None)
+        super(TestDescribeKey, self).setUp()
+        self.cmd = key.DescribeKey(self.app, None)
 
-    def test_show_key(self, mocked_create):
+    def test_describe_key(self, mocked_create):
         args = [
             "key-id",
             "--sequence", "ThisIsA36BitSequence",
@@ -237,20 +237,20 @@ class TestDisableKey(base.KeyManagerBaseTestCase):
 
 
 @mock.patch.object(key_mgr.KeyManager, "_create")
-class TestDeleteKey(base.KeyManagerBaseTestCase):
+class TestScheduleDeletionKey(base.KeyManagerBaseTestCase):
     def setUp(self):
-        super(TestDeleteKey, self).setUp()
-        self.cmd = key.DeleteKey(self.app, None)
+        super(TestScheduleDeletionKey, self).setUp()
+        self.cmd = key.ScheduleDeletionKey(self.app, None)
 
-    def test_delete_key(self, mocked_create):
+    def test_schedule_deletion_key(self, mocked_create):
         args = [
             "key-id",
-            "--days", "10",
+            "--pending-days", "10",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
             ("key", "key-id"),
-            ("days", 10),
+            ("pending_days", 10),
             ("sequence", "ThisIsA36BitSequence"),
         ]
         parsed_args = self.check_parser(
@@ -279,12 +279,12 @@ class TestDeleteKey(base.KeyManagerBaseTestCase):
 
 
 @mock.patch.object(key_mgr.KeyManager, "_create")
-class TestCancelDeleteKey(base.KeyManagerBaseTestCase):
+class TestCancelDeletionKey(base.KeyManagerBaseTestCase):
     def setUp(self):
-        super(TestCancelDeleteKey, self).setUp()
-        self.cmd = key.CancelDeleteKey(self.app, None)
+        super(TestCancelDeletionKey, self).setUp()
+        self.cmd = key.CancelDeletionKey(self.app, None)
 
-    def test_delete_key(self, mocked_create):
+    def test_cancel_delete_key(self, mocked_create):
         args = [
             "key-id",
             "--sequence", "ThisIsA36BitSequence",

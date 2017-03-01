@@ -23,25 +23,27 @@ from kmclient.v1 import resource
 LOG = logging.getLogger(__name__)
 
 
-class CreateEncryptData(command.ShowOne):
+class CreateDatakey(command.ShowOne):
     _description = _("Create encrypt data pair")
 
     def get_parser(self, prog_name):
-        parser = super(CreateEncryptData, self).get_parser(prog_name)
+        parser = super(CreateDatakey, self).get_parser(prog_name)
         pb.Encryption.add_key_id_opt(parser)
-        pb.Encryption.add_no_plain_text_opt(parser)
+        pb.Encryption.add_without_plain_text_opt(parser)
+        pb.Encryption.add_datakey_length_opt(parser)
         pb.Encryption.add_context_opt(parser)
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 
     def take_action(self, args):
-        mgr = self.app.client_manager.key_manager.encryption
+        mgr = self.app.client_manager.key_manager.datakeys
         kwargs = {
-            "context": args.context,
+            "datakey_length": args.datakey_length,
+            "encryption_context": args.encryption_context,
             "sequence": args.sequence,
         }
 
-        if args.no_plain_text:
+        if args.without_plain_text:
             data_pair = mgr.create_no_plain_encrypt_data(args.key, **kwargs)
             columns = ["Key ID", "Cipher Text", ]
             output = data_pair.get_display_data(columns)
@@ -53,22 +55,24 @@ class CreateEncryptData(command.ShowOne):
             return columns, output
 
 
-class EncryptData(command.ShowOne):
+class EncryptDatakey(command.ShowOne):
     _description = _("encrypt data")
 
     def get_parser(self, prog_name):
-        parser = super(EncryptData, self).get_parser(prog_name)
+        parser = super(EncryptDatakey, self).get_parser(prog_name)
         pb.Encryption.add_key_id_opt(parser)
         pb.Encryption.add_plain_text_opt(parser)
         pb.Encryption.add_context_opt(parser)
+        pb.Encryption.add_datakey_plain_length_opt(parser)
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 
     def take_action(self, args):
-        mgr = self.app.client_manager.key_manager.encryption
+        mgr = self.app.client_manager.key_manager.datakeys
         kwargs = {
             "plain_text": args.plain_text,
-            "context": args.context,
+            "datakey_plain_length": args.datakey_plain_length,
+            "encryption_context": args.encryption_context,
             "sequence": args.sequence,
         }
         data_pair = mgr.encrypt_data(args.key, **kwargs)
@@ -77,22 +81,24 @@ class EncryptData(command.ShowOne):
         return columns, output
 
 
-class DecryptData(command.ShowOne):
+class DecryptDatakey(command.ShowOne):
     _description = _("decrypt data")
 
     def get_parser(self, prog_name):
-        parser = super(DecryptData, self).get_parser(prog_name)
+        parser = super(DecryptDatakey, self).get_parser(prog_name)
         pb.Encryption.add_key_id_opt(parser)
         pb.Encryption.add_cipher_text_opt(parser)
         pb.Encryption.add_context_opt(parser)
+        pb.Encryption.add_datakey_cipher_length_opt(parser)
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 
     def take_action(self, args):
-        mgr = self.app.client_manager.key_manager.encryption
+        mgr = self.app.client_manager.key_manager.datakeys
         kwargs = {
             "cipher_text": args.cipher_text,
-            "context": args.context,
+            "datakey_cipher_length": args.datakey_cipher_length,
+            "encryption_context": args.encryption_context,
             "sequence": args.sequence,
         }
         data = mgr.decrypt_data(args.key, **kwargs)
@@ -101,15 +107,17 @@ class DecryptData(command.ShowOne):
         return columns, output
 
 
-class RandomData(command.Command):
+class RandomGenerate(command.Command):
     _description = _("create random data")
 
     def get_parser(self, prog_name):
-        parser = super(RandomData, self).get_parser(prog_name)
+        parser = super(RandomGenerate, self).get_parser(prog_name)
+        pb.Encryption.add_random_data_len_opt(parser)
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 
     def take_action(self, args):
-        mgr = self.app.client_manager.key_manager.encryption
-        data = mgr.random_data(sequence=args.sequence)
+        mgr = self.app.client_manager.key_manager.datakeys
+        data = mgr.random_data(random_data_length=args.random_data_length,
+                               sequence=args.sequence)
         return data["random_data"]
