@@ -66,14 +66,14 @@ class TestCreateDatakey(base.KeyManagerBaseTestCase):
 
     def test_create_encrypt_data(self, mocked_create):
         args = [
-            "--key", "key-id",
+            "--key-id", "key-id",
             "--datakey-length", "512",
             "--encryption-context", "k1=v1",
             "--encryption-context", "k2=v2",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
-            ("key", "key-id"),
+            ("key_id", "key-id"),
             ("datakey_length", 512),
             ("encryption_context", dict(k1="v1", k2="v2")),
             ("sequence", "ThisIsA36BitSequence"),
@@ -108,14 +108,14 @@ class TestCreateDatakey(base.KeyManagerBaseTestCase):
 
     def test_create_encrypt_data_no_plain_text(self, mocked_create):
         args = [
-            "--key", "key-id",
+            "--key-id", "key-id",
             "--encryption-context", "k1=v1",
             "--encryption-context", "k2=v2",
             "--without-plain-text",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
-            ("key", "key-id"),
+            ("key_id", "key-id"),
             ("without_plain_text", True),
             ("encryption_context", dict(k1="v1", k2="v2")),
             ("sequence", "ThisIsA36BitSequence"),
@@ -155,7 +155,7 @@ class TestEncryptDatakey(base.KeyManagerBaseTestCase):
 
     def test_encrypt(self, mocked_create):
         args = [
-            "--key", "key-id",
+            "--key-id", "key-id",
             "--datakey-plain-length", "64",
             "--encryption-context", "k1=v1",
             "--encryption-context", "k2=v2",
@@ -163,7 +163,7 @@ class TestEncryptDatakey(base.KeyManagerBaseTestCase):
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
-            ("key", "key-id"),
+            ("key_id", "key-id"),
             ("plain_text", "some-plain-text"),
             ("datakey_plain_length", 64),
             ("encryption_context", dict(k1="v1", k2="v2")),
@@ -204,14 +204,14 @@ class TestDecryptDatakey(base.KeyManagerBaseTestCase):
 
     def test_decrypt(self, mocked_create):
         args = [
-            "--key", "key-id",
+            "--key-id", "key-id",
             "--encryption-context", "k1=v1",
             "--encryption-context", "k2=v2",
             "--cipher-text", "some-cipher-text",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
-            ("key", "key-id"),
+            ("key_id", "key-id"),
             ("cipher_text", "some-cipher-text"),
             ("encryption_context", dict(k1="v1", k2="v2")),
             ("sequence", "ThisIsA36BitSequence"),

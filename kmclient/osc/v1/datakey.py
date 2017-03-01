@@ -44,12 +44,12 @@ class CreateDatakey(command.ShowOne):
         }
 
         if args.without_plain_text:
-            data_pair = mgr.create_no_plain_encrypt_data(args.key, **kwargs)
+            data_pair = mgr.create_no_plain_encrypt_data(args.key_id, **kwargs)
             columns = ["Key ID", "Cipher Text", ]
             output = data_pair.get_display_data(columns)
             return columns, output
         else:
-            data_pair = mgr.create_encrypt_data(args.key, **kwargs)
+            data_pair = mgr.create_encrypt_data(args.key_id, **kwargs)
             columns = resource.EncryptData.show_column_names
             output = data_pair.get_display_data(columns)
             return columns, output
@@ -75,7 +75,7 @@ class EncryptDatakey(command.ShowOne):
             "encryption_context": args.encryption_context,
             "sequence": args.sequence,
         }
-        data_pair = mgr.encrypt_data(args.key, **kwargs)
+        data_pair = mgr.encrypt_data(args.key_id, **kwargs)
         columns = ["Key ID", "Cipher Text", ]
         output = data_pair.get_display_data(columns)
         return columns, output
@@ -101,7 +101,7 @@ class DecryptDatakey(command.ShowOne):
             "encryption_context": args.encryption_context,
             "sequence": args.sequence,
         }
-        data = mgr.decrypt_data(args.key, **kwargs)
+        data = mgr.decrypt_data(args.key_id, **kwargs)
         columns = ["Key", "Digest", ]
         output = [data.data_key, data.datakey_dgst]
         return columns, output
