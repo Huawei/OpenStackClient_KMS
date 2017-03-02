@@ -30,11 +30,10 @@ class Key(object):
         )
 
     @staticmethod
-    def add_alias_opt(parser):
+    def add_alias_arg(parser):
         parser.add_argument(
-            "--alias",
+            "alias",
             metavar="<alias>",
-            required=True,
             help=_("Key alias name, should match regex "
                    "'^[a-zAZ0-9:/_-]{1,255}$', and not end with '/default' "
                    "which has been used by system")
@@ -149,12 +148,11 @@ class Encryption(object):
         )
 
     @staticmethod
-    def add_random_data_len_opt(parser):
+    def add_random_data_len_arg(parser):
         parser.add_argument(
-            "--random-data-length",
+            "random_data_length",
             metavar="<length>",
             type=int,
-            default=512,
             help=_("The length of the random byte string")
         )
 

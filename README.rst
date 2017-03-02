@@ -75,7 +75,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 1. key create(创建密钥)::
 
-    $ openstack kms key create --alias qianbiao-ng --realm eu-de --description desc
+    $ openstack kms key create qianbiao-ng --realm eu-de --description desc
         --policy '{"key":"value"}' --usage usage --type keytype
         --sequence 919c82d4-8046-4722-9094-35c3c6524cff
     +-----------+--------------------------------------+
@@ -86,9 +86,9 @@ Key Manager Client contains commands list below, use -h option to get more usage
     +-----------+--------------------------------------+
 
 
-#. Key describe(查询密钥信息)::
+#. Key show(查询密钥信息)::
 
-    $ openstack key describe 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
+    $ openstack key show 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
     +-------------------------+--------------------------------------+
     | Field                   | Value                                |
     +-------------------------+--------------------------------------+
@@ -125,7 +125,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
         --sequence=0f31a9f0-f9a2-11e6-8448-3c970e4b3294
     Key 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 disabled
 
-#. key delete(计划删除密钥)::
+#. key schedule deletion(计划删除密钥)::
 
     $ openstack kms key schedule deletion b919e712-3743-4f7d-8d9e-8730a94aea0b --pending-days=7
     +--------+--------------------------------------+
@@ -135,7 +135,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
     | Status | Pending Deleted                      |
     +--------+--------------------------------------+
 
-#. key cancel delete(取消计划删除密钥)::
+#. key cancel deletion(取消计划删除密钥)::
 
     $ openstack kms key cancel deletion b919e712-3743-4f7d-8d9e-8730a94aea0b
     +--------+--------------------------------------+
@@ -205,7 +205,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. random generate(创建随机数)::
 
-    $ openstack kms random generate --random-data-length 512 --sequence 919c82d4-8046-4722-9094-35c3c6524cff
+    $ openstack kms random generate 512 --sequence 919c82d4-8046-4722-9094-35c3c6524cff
     ABB030187057A4A7DF642BD7F57CE79EDB1BE3DF98E002DF753B6F53DB22FE8A33BD413BF0149BF55260EFDC7BC78446323A95704D81C77A767B25E1DBE74F7A
 
 

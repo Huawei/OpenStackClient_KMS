@@ -28,7 +28,7 @@ class TestRandomGenerate(base.KeyManagerBaseTestCase):
 
     def test_random(self, mocked_create):
         args = [
-            "--random-data-length", "128",
+            "128",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [

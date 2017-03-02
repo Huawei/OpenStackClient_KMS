@@ -28,7 +28,7 @@ class CreateKey(command.ShowOne):
 
     def get_parser(self, prog_name):
         parser = super(CreateKey, self).get_parser(prog_name)
-        pb.Key.add_alias_opt(parser)
+        pb.Key.add_alias_arg(parser)
         pb.Key.add_realm_opt(parser)
         pb.Key.add_desc_opt(parser)
         pb.Key.add_policy_opt(parser)
@@ -69,12 +69,12 @@ class ListKey(command.Lister):
         return ["Key ID"], [[key, ] for key in result["keys"]]
 
 
-class DescribeKey(command.ShowOne):
-    _description = _("describe key")
+class ShowKey(command.ShowOne):
+    _description = _("show key")
 
     def get_parser(self, prog_name):
-        parser = super(DescribeKey, self).get_parser(prog_name)
-        pb.Key.add_key_id_arg(parser, 'describe')
+        parser = super(ShowKey, self).get_parser(prog_name)
+        pb.Key.add_key_id_arg(parser, 'display')
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 

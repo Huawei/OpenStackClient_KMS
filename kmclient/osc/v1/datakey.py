@@ -112,7 +112,7 @@ class RandomGenerate(command.Command):
 
     def get_parser(self, prog_name):
         parser = super(RandomGenerate, self).get_parser(prog_name)
-        pb.Encryption.add_random_data_len_opt(parser)
+        pb.Encryption.add_random_data_len_arg(parser)
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 
