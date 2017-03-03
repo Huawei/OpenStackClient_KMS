@@ -81,7 +81,7 @@ class KeyManager(manager.Manager):
         """
         json = utils.remove_empty_from_dict({
             "limit": limit,
-            "offset": offset,
+            "marker": offset,
             "sequence": sequence,
         })
         return self._create("/list-keys", json=json, raw=True)
