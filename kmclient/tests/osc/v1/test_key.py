@@ -98,7 +98,7 @@ class TestListKey(base.KeyManagerBaseTestCase):
 
         json = {
             "limit": 10,
-            "offset": 5,
+            "marker": 5,
             "sequence": "ThisIsA36BitSequence",
         }
         mocked_create.assert_called_once_with(
