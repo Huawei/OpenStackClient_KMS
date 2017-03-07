@@ -107,7 +107,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. Key list(查询密钥列表)::
 
-    $ openstack kms key list --limit=2 --marker=2
+    $ openstack kms key list --limit 2 --marker 2
     +-------------+--------------------------------------+
     | Field       | Value                                |
     +-------------+--------------------------------------+
@@ -122,19 +122,19 @@ Key Manager Client contains commands list below, use -h option to get more usage
 #. Key enable(启用密钥)::
 
     $ openstack key enable 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
-        --sequence=0f31a9f0-f9a2-11e6-8448-3c970e4b3294
+        --sequence 0f31a9f0-f9a2-11e6-8448-3c970e4b3294
     Key 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 enabled
 
 
 #. Key disable(禁用密钥)::
 
     $ openstack key disable 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
-        --sequence=0f31a9f0-f9a2-11e6-8448-3c970e4b3294
+        --sequence 0f31a9f0-f9a2-11e6-8448-3c970e4b3294
     Key 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 disabled
 
 #. key schedule deletion(计划删除密钥)::
 
-    $ openstack kms key schedule deletion b919e712-3743-4f7d-8d9e-8730a94aea0b --pending-days=7
+    $ openstack kms key schedule deletion b919e712-3743-4f7d-8d9e-8730a94aea0b --pending-days 7
     +--------+--------------------------------------+
     | Field  | Value                                |
     +--------+--------------------------------------+
@@ -155,8 +155,8 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. datakey create(创建数据密钥)::
 
-    $ openstack kms datakey create --key=b919e712-3743-4f7d-8d9e-8730a94aea0b
-        --encryption-context=v1=k1 --encryption-context=v2=k2 --datakey-length=512
+    $ openstack kms datakey create --key-id b919e712-3743-4f7d-8d9e-8730a94aea0b
+        --encryption-context v1=k1 --encryption-context v2=k2 --datakey-length 512
     +-------------+------------------------------------------------------------------------------------------------------------------+
     | Field       | Value                                                                                                            |
     +-------------+------------------------------------------------------------------------------------------------------------------+
@@ -171,8 +171,8 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 
     # create encrypt data pair without plain text returned
-    $ openstack kms datakey create --key=b919e712-3743-4f7d-8d9e-8730a94aea0b  --datakey-length=512
-        --without-plain-text --encryption-context=v1=k1 --encryption-context=v2=k2
+    $ openstack kms datakey create --key-id b919e712-3743-4f7d-8d9e-8730a94aea0b  --datakey-length 512
+        --without-plain-text --encryption-context v1=k1 --encryption-context v2=k2
     +-------------+------------------------------------------------------------------------------------------------------------------+
     | Field       | Value                                                                                                            |
     +-------------+------------------------------------------------------------------------------------------------------------------+
@@ -187,7 +187,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
 #. datakey encrypt(加密数据密钥)::
 
     $ openstack kms datakey encrypt --key-id 0d0466b0-e727-4d9c-b35d-f84bb474a37f
-        --encryption-context=k1=v1 --plain-text plaintext --datakey-plain-length 64
+        --encryption-context k1=v1 --plain-text plaintext --datakey-plain-length 64
     +-------------+------------------------------------------------------------------------------------------------------------------+
     | Field       | Value                                                                                                            |
     +-------------+------------------------------------------------------------------------------------------------------------------+
@@ -200,8 +200,8 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. datakey decrypt(解密数据密钥)::
 
-    $ openstack kms datakey decrypt --cipher-text=xxxxxx --key-id=b919e712-3743-4f7d-8d9e-8730a94aea0b
-        --encryption-context=v1=k1 --encryption-context=v2=k2 --datakey-cipher-length=64
+    $ openstack kms datakey decrypt --cipher-text xxxxxx --key-id b919e712-3743-4f7d-8d9e-8730a94aea0b
+        --encryption-context v1=k1 --encryption-context v2=k2 --datakey-cipher-length 64
     +-------------+------------------------------------------------------------------------------------------------------------------+
     | Field       | Value                                                                                                            |
     +-------------+------------------------------------------------------------------------------------------------------------------+
