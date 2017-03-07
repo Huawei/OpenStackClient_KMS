@@ -53,12 +53,13 @@ class BaseParser(object):
         )
 
     @staticmethod
-    def add_offset_opt(parser):
+    def add_marker_opt(parser):
         parser.add_argument(
-            "--offset",
-            metavar="<offset>",
+            "--marker",
+            metavar="<marker>",
             type=int,
-            help=_("Skipped records number (pagination)")
+            help=_("Skipped records number for getting next page records, "
+                   "Empty when truncated is False")
         )
 
     @staticmethod

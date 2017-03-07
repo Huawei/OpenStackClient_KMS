@@ -12,6 +12,7 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 #
+from osc_lib import utils as formatters
 
 from kmclient.common import display
 from kmclient.common import resource
@@ -34,6 +35,12 @@ class Key(resource.Resource, display.Display):
         "Scheduled deletion date",
     ]
 
+    list_column_names = [
+        "Key list",
+        "Next Marker",
+        "Truncated",
+    ]
+
     formatter = {
         "Creation date": utils.format_time,
         "Scheduled deletion date": utils.format_time,
@@ -47,6 +54,10 @@ class Key(resource.Resource, display.Display):
     @property
     def id(self):
         return self.key_id
+
+    @property
+    def key_list(self):
+        return formatters.format_list(self.keys, '\n')
 
     @property
     def status(self):

@@ -71,20 +71,20 @@ class KeyManager(manager.Manager):
         })
         return self._create('/create-key', json=json, key="key_info")
 
-    def list(self, limit=None, offset=None, sequence=None):
+    def list(self, marker=None, limit=None, sequence=None):
         """list keys
 
+        :param marker:
         :param limit:
-        :param offset:
         :param sequence:
         :return:
         """
         json = utils.remove_empty_from_dict({
+            "marker": marker,
             "limit": limit,
-            "marker": offset,
             "sequence": sequence,
         })
-        return self._create("/list-keys", json=json, raw=True)
+        return self._create("/list-keys", json=json)
 
     def get(self, key_id, sequence=None):
         """get key detail

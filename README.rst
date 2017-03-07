@@ -107,10 +107,17 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. Key list(查询密钥列表)::
 
-    $ openstack volume backup ext create volume-telia-WS1 --name
-    A1-QianBiao-Test --description=QianBiao-Test-purpose
-        --os-vb-endpoint-override=https://vbs.eu-de.otc.t-systems.com
-    Request Received, job id: 2c9eb2c559b8a2c2015a0e039f095821
+    $ openstack kms key list --limit=2 --marker=2
+    +-------------+--------------------------------------+
+    | Field       | Value                                |
+    +-------------+--------------------------------------+
+    | Key list    | 1c985324-43ff-4f81-bb3f-e818afba65fb |
+    |             | 4074f2b5-3455-4f08-bbbf-b5a321114dc4 |
+    | Next Marker | 4                                    |
+    | Truncated   | true                                 |
+    +-------------+--------------------------------------+
+
+
 
 #. Key enable(启用密钥)::
 

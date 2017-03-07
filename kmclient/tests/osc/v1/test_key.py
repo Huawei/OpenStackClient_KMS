@@ -69,12 +69,12 @@ class TestListKey(base.KeyManagerBaseTestCase):
     def test_list_key(self, mocked_create):
         args = [
             "--limit", "10",
-            "--offset", "5",
+            "--marker", "5",
             "--sequence", "ThisIsA36BitSequence",
         ]
         verify_args = [
             ("limit", 10),
-            ("offset", 5),
+            ("marker", 5),
             ("sequence", "ThisIsA36BitSequence"),
         ]
         parsed_args = self.check_parser(
@@ -90,10 +90,10 @@ class TestListKey(base.KeyManagerBaseTestCase):
                                 "9bff814e-3c1e-4788-ad6e-cc17bd84ffa5",
                                 "ac945d5c-d87e-4f26-a333-622f74a714bb",
                                 "b919e712-3743-4f7d-8d9e-8730a94aea0b"],
-                       "next_marker": "",
+                       "next_marker": "9",
                        "truncated": "false"}
 
-        mocked_create.return_value = br.DictWithMeta(return_data, "RequestId")
+        mocked_create.return_value = resource.Key(None, return_data)
         columns, data = self.cmd.take_action(parsed_args)
 
         json = {
@@ -102,10 +102,23 @@ class TestListKey(base.KeyManagerBaseTestCase):
             "sequence": "ThisIsA36BitSequence",
         }
         mocked_create.assert_called_once_with(
-            "/list-keys", json=json, raw=True
+            "/list-keys", json=json,
         )
-        self.assertEqual(columns, ["Key ID"])
-        self.assertEqual([[key] for key in return_data["keys"]], data)
+        self.assertEqual(columns, resource.Key.list_column_names)
+        expected = (
+            ('0a7a3f08-1529-4b30-a7bd-d74d97a908a9\n'
+             '1c985324-43ff-4f81-bb3f-e818afba65fb\n'
+             '4074f2b5-3455-4f08-bbbf-b5a321114dc4\n'
+             '4865d216-8aae-4de3-9162-fcb7cb025449\n'
+             '5c9bb365-d44f-4860-9d21-d85edd384e9f\n'
+             '776462d9-2da1-4c17-96e1-430d61da9273\n'
+             '9bff814e-3c1e-4788-ad6e-cc17bd84ffa5\n'
+             'ac945d5c-d87e-4f26-a333-622f74a714bb\n'
+             'b919e712-3743-4f7d-8d9e-8730a94aea0b'),
+            '9',
+            'false'
+        )
+        self.assertEqual(expected, data)
 
 
 @mock.patch.object(key_mgr.KeyManager, "_create")

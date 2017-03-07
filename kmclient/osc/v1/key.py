@@ -52,21 +52,22 @@ class CreateKey(command.ShowOne):
         return columns, output
 
 
-class ListKey(command.Lister):
+class ListKey(command.ShowOne):
     _description = _("List keys")
 
     def get_parser(self, prog_name):
         parser = super(ListKey, self).get_parser(prog_name)
         bpb.BaseParser.add_limit_opt(parser)
-        bpb.BaseParser.add_offset_opt(parser)
+        bpb.BaseParser.add_marker_opt(parser)
         bpb.BaseParser.add_seq_opt(parser)
         return parser
 
     def take_action(self, args):
         mgr = self.app.client_manager.key_manager.keys
-        result = mgr.list(limit=args.limit, offset=args.offset,
+        result = mgr.list(marker=args.marker, limit=args.limit,
                           sequence=args.sequence)
-        return ["Key ID"], [[key, ] for key in result["keys"]]
+        columns = resource.Key.list_column_names
+        return columns, result.get_display_data(columns)
 
 
 class ShowKey(command.ShowOne):
