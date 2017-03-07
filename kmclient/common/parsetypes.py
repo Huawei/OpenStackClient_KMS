@@ -13,9 +13,9 @@
 #   under the License.
 #
 import argparse
-import string
-from datetime import datetime
+import io
 
+from osc_lib import exceptions
 from osc_lib.i18n import _
 
 
@@ -40,3 +40,19 @@ def int_range_type(from_, to):
         return int_user_input
 
     return wrapped
+
+
+def blob_or_filepath(user_input):
+
+    if user_input and user_input.startswith('file://'):
+        try:
+            filepath = user_input[7:]
+            file_op = io.open(filepath, 'rb')
+            return file_op.read()
+        except IOError as e:
+            msg = _("Can't open file '%(source)s': %(exception)s")
+            raise exceptions.CommandError(
+                msg % dict(source=user_input, exception=e)
+            )
+    else:
+        return user_input

@@ -114,18 +114,24 @@ class Encryption(object):
     def add_plain_text_opt(parser):
         parser.add_argument(
             "--plain-text",
-            metavar="<text>",
+            metavar="<blob>",
             required=True,
-            help=_("DEK plain text + sha256(plain text) in hex")
+            type=parsetypes.blob_or_filepath,
+            help=_("Data to be encrypted. Could be blob (blob-text) "
+                   "or file-path (file://absolute-path), if file-path, "
+                   "will read file content as blob.")
         )
 
     @staticmethod
     def add_cipher_text_opt(parser):
         parser.add_argument(
             "--cipher-text",
-            metavar="<text>",
+            metavar="<blob>",
             required=True,
-            help=_("DEK cipher text + sha256(cipher text) in hex")
+            type=parsetypes.blob_or_filepath,
+            help=_("Data to be decrypted. Could be blob (blob-text) "
+                   "or file-path (file://absolute-path), if file-path, "
+                   "will read file content as blob.")
         )
 
     @staticmethod
