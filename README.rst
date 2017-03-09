@@ -88,7 +88,7 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. Key show(查询密钥信息)::
 
-    $ openstack key show 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
+    $ openstack kms key show 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
     +-------------------------+--------------------------------------+
     | Field                   | Value                                |
     +-------------------------+--------------------------------------+
@@ -121,14 +121,14 @@ Key Manager Client contains commands list below, use -h option to get more usage
 
 #. Key enable(启用密钥)::
 
-    $ openstack key enable 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
+    $ openstack kms key enable 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
         --sequence 0f31a9f0-f9a2-11e6-8448-3c970e4b3294
     Key 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 enabled
 
 
 #. Key disable(禁用密钥)::
 
-    $ openstack key disable 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
+    $ openstack kms key disable 0a7a3f08-1529-4b30-a7bd-d74d97a908a9
         --sequence 0f31a9f0-f9a2-11e6-8448-3c970e4b3294
     Key 0a7a3f08-1529-4b30-a7bd-d74d97a908a9 disabled
 
