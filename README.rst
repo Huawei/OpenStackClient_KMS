@@ -76,7 +76,6 @@ Key Manager Client contains commands list below, use -h option to get more usage
 1. key create(创建密钥)::
 
     $ openstack kms key create qianbiao-ng --realm eu-de --description desc
-        --policy '{"key":"value"}' --usage usage --type keytype
         --sequence 919c82d4-8046-4722-9094-35c3c6524cff
     +-----------+--------------------------------------+
     | Field     | Value                                |
