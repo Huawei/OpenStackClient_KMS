@@ -37,8 +37,8 @@ def make_client(instance):
     client_clazz = utils.get_client_class(API_NAME, api_version, API_VERSIONS)
 
     kwargs = {
-        'region_name': instance.region_name,
-        'interface': instance.interface
+        # 'region_name': instance.region_name,
+        # 'interface': instance.interface
     }
     endpoint = instance._cli_options.config.get('km_endpoint_override', None)
 
